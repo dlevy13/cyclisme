@@ -1,0 +1,118 @@
+---
+title: "Tableau de bord de David"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: row
+    vertical_layout: scroll
+    
+      
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+setwd("/Users/davidlevy/Documents/GIT/cyclisme")
+source("./src_base.R")
+velo=readRDS("./bases/velo.RDS")
+nolio=readRDS("./bases/nolio.RDS")
+
+statSem=base_stat("2020")
+m=max(velo[velo$annee=="2023",]$semaine)
+```
+
+# Vue d'ensemble
+
+row
+-----------------------------------------------------------------------
+
+### Distance
+
+```{r}
+getGraph(statSem,m,"dist")
+
+```
+
+### Durée d'activité
+
+```{r}
+getGraph(statSem,m,"tps")
+
+```
+
+row
+-----------------------------------------------------------------------
+
+### Puissance
+
+```{r}
+getGraph(statSem,m,"puis")
+```
+
+### Charge d'entraînement
+
+```{r}
+graph_nolio()
+```
+
+# Performance
+
+row
+-----------------------------------------------------------------------
+### FC Moyenne
+
+```{r}
+GetCourbe(filtre1="dist",seuil1=30,filtre2="fc_moy",seuil2=120,
+          var1="date2",var2="fc_moy")
+```
+
+### FC Moyenne
+
+```{r}
+NuagePoints("var2",seuil=120,var1="tps",var2="fc_moy")
+```
+
+row
+-----------------------------------------------------------------------
+
+
+### Cadence
+
+```{r}
+GetCourbe(filtre1="dist",seuil1=15,filtre2="cadence",seuil2=0,
+          var1="date2",var2="cadence")
+```
+
+### Puissance
+
+```{r}
+GetCourbe(filtre1="dist",seuil1=15,filtre2="puissance",seuil2=0,
+          var1="date2",var2="puissance")
+```
+
+
+# Cumul annuel des activités
+
+Row
+-----------------------------------------------------------------------
+
+### Distance
+
+```{r}
+getCourbeCum(statSem,m,"Cumdist")
+
+```
+
+### heures d'activité
+
+```{r}
+getCourbeCum(statSem,m,"Cumtps")
+
+```
+
+## row
+
+### dénivelé
+
+```{r}
+getCourbeCum(statSem,m,"Cumdplus")
+
+```
