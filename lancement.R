@@ -46,9 +46,7 @@ getCourbeCum(statSem,m,"Cumtps")
 getCourbeCum(statSem,m,"Cumdplus")
 getCourbeCum(statSem,m,"CumTSS")
 
-df=statSem
-sem=m
-donn="CumTSS"
+
 
 #Nolio
 

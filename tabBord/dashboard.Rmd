@@ -4,13 +4,11 @@ output:
   flexdashboard::flex_dashboard:
     orientation: row
     vertical_layout: scroll
-    
-      
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-setwd("/Users/davidlevy/Documents/GIT/cyclisme")
+setwd("/Users/davidlevy/Documents/GIT/bike")
 source("./src_base.R")
 velo=readRDS("./bases/velo.RDS")
 nolio=readRDS("./bases/nolio.RDS")
@@ -21,8 +19,7 @@ m=max(velo[velo$annee=="2023",]$semaine)
 
 # Vue d'ensemble
 
-row
------------------------------------------------------------------------
+## row
 
 ### Distance
 
@@ -38,8 +35,7 @@ getGraph(statSem,m,"tps")
 
 ```
 
-row
------------------------------------------------------------------------
+## row
 
 ### Puissance
 
@@ -55,8 +51,8 @@ graph_nolio()
 
 # Performance
 
-row
------------------------------------------------------------------------
+## row
+
 ### FC Moyenne
 
 ```{r}
@@ -70,9 +66,7 @@ GetCourbe(filtre1="dist",seuil1=30,filtre2="fc_moy",seuil2=120,
 NuagePoints("var2",seuil=120,var1="tps",var2="fc_moy")
 ```
 
-row
------------------------------------------------------------------------
-
+## row
 
 ### Cadence
 
@@ -88,11 +82,9 @@ GetCourbe(filtre1="dist",seuil1=15,filtre2="puissance",seuil2=0,
           var1="date2",var2="puissance")
 ```
 
-
 # Cumul annuel des activités
 
-Row
------------------------------------------------------------------------
+## Row
 
 ### Distance
 
@@ -114,5 +106,12 @@ getCourbeCum(statSem,m,"Cumtps")
 
 ```{r}
 getCourbeCum(statSem,m,"Cumdplus")
+
+```
+
+### TSS
+
+```{r}
+getCourbeCum(statSem,m,"CumTSS")
 
 ```
