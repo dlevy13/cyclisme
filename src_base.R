@@ -240,18 +240,23 @@ GetCourbe=function(filtre1="annee",seuil1=-1,filtre2="dist",seuil2=-1,var1,var2)
 
 
 getCourbeCum=function(df,sem,donn){
-  bbas=df %>% filter(semaine<=sem)
+  #bbas=df %>% filter(semaine<=sem)
+  bbas=df
   s=which(colnames(bbas) == donn)
   names(bbas)[s]="var"
-  #pour afficher valeur max de l'ann?e
+  #pour afficher valeur max de l'année
+  #pour année antérieur on prend le max de toute l'annéé
+  s22=statSem %>% filter(annee==2022) %>% summarise(sem=max(semaine))
+  s21=statSem %>% filter(annee==2021) %>% summarise(sem=max(semaine))
+  
   m23=round(max(bbas[bbas$annee=="2023" & bbas$semaine<=m,]$var),0)
-  m22=round(max(bbas[bbas$annee=="2022" & bbas$semaine<=m,]$var),0)
-  m21=round(max(bbas[bbas$annee=="2021" & bbas$semaine<=m,]$var),0)
+  m22=round(max(bbas[bbas$annee=="2022" & bbas$semaine==s22$sem,]$var),0)
+  m21=round(max(bbas[bbas$annee=="2021" & bbas$semaine==s21$sem,]$var),0)
   
   if(donn == "Cumtps"){
-    m23lib=max(bbas[bbas$annee=="2023" & bbas$semaine<=m,]$Cumduree)
-    m22lib=max(bbas[bbas$annee=="2022" & bbas$semaine<=m,]$Cumduree)
-    m21lib=max(bbas[bbas$annee=="2021" & bbas$semaine<=m,]$Cumduree)
+    m23lib=max(bbas[bbas$annee=="2023" & bbas$semaine==m,]$Cumduree)
+    m22lib=max(bbas[bbas$annee=="2022" & bbas$semaine==s22$sem,]$Cumduree)
+    m21lib=max(bbas[bbas$annee=="2021" & bbas$semaine==s21$sem,]$Cumduree)
   }
   if(donn == "Cumdist"){
     m23lib=paste0(format(m23, big.mark=" ")," Km")
