@@ -4,6 +4,7 @@
 
 source("./src_base.R")
 FCseuil=170
+FTP=258
     # creat_fic()
     # creat_ficNolio()
 

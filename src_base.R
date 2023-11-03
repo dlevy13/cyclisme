@@ -4,7 +4,7 @@ library(lubridate)
 library(forecast)
 
 ## chargement des fichiers
-
+k=1
 creat_fic=function(){
   #1 charger base
   velo_0=readRDS("./bases/velo.RDS")
@@ -58,8 +58,13 @@ creat_fic=function(){
     velo$dplus=ifelse(velo$dplus-floor(velo$dplus)==0,velo$dplus,
                       velo$dplus*1000)
     #correction TSS -> avec FC
-    velo$TSS=ifelse(velo$TSS==0 & velo$fc_moy >0,((velo$heures*3600+velo$minutes*60)*velo$fc_moy*(velo$fc_moy/FCseuil))/(FCseuil*3600)*100,
+    velo$TSS=ifelse(velo$TSS==0 & velo$puissance==0 & velo$fc_moy >0,((velo$heures*3600+velo$minutes*60)*velo$fc_moy*(velo$fc_moy/FCseuil))/(FCseuil*3600)*100,
                     velo$TSS)
+    
+    velo$TSS=ifelse(velo$TSS==0 & velo$puissance>0,
+                    ((velo$heures*3600+velo$minutes*60)*velo$puissance*(velo$puissance/FTP))/(FTP*3600)*100,
+                    velo$TSS)
+    
     
     velo=rbind(velo_0,velo) %>% mutate(dist0=round(dist/10,0)*10) %>% 
       distinct(type,date,dist0,.keep_all = T) %>% select(-dist0)
@@ -277,9 +282,9 @@ getCourbeCum=function(df,sem,donn){
   gs=ggplot(data=bbas, aes(x=semaine, y=var, group=annee,color=annee)) +
     geom_line(aes(linewidth = 0.8)) +
     labs(y = donn) + 
-    annotate(geom="text", x=3, y=m23, label=paste0("2023 : ",m23lib))+ 
-    annotate(geom="text", x=3, y=m23*.95, label=paste0("2022 : ",m22lib))+ 
-    annotate(geom="text", x=3, y=m23*.90, label=paste0("2021 : ",m21lib))+
+    annotate(geom="text", x=4, y=m23, label=paste0("2023 : ",m23lib))+ 
+    annotate(geom="text", x=4, y=m23*.95, label=paste0("2022 : ",m22lib))+ 
+    annotate(geom="text", x=4, y=m23*.90, label=paste0("2021 : ",m21lib))+
     guides(linewidth = "none") #supprimer la l?gende de "linewidth"
   return(gs)
 }
